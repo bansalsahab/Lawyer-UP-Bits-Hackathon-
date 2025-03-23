@@ -1,4 +1,4 @@
-AI-Generated Legal Drafts and Contracts
+#AI-Generated Legal Drafts and Contracts
 Problem 6: AI-generated Legal Drafts and Contracts
 A Generative AI system that helps businesses and lawyers quickly draft customized contracts and legal documents based on user-defined clauses and inputs.
 
