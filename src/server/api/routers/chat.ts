@@ -22,8 +22,10 @@ export const chats = createTRPCRouter({
     createChat: protectedProcedure
         .input(
             z.object({
-                chatId: z.string(), // Optional so that a new chat doesn't require an ID
+                chatId: z.string().optional(), // Optional; if provided, we'll upsert the chat.
                 title: z.string().optional(),
+                prompt: z.string(), // The user's prompt
+                response: z.string(), // The system's response (e.g., generated legal document text)
             })
         )
         .mutation(async ({ ctx, input }) => {
@@ -31,29 +33,71 @@ export const chats = createTRPCRouter({
                 throw new Error("Unauthorized client");
             }
 
-            const { chatId, title } = input;
+            const { chatId, title, prompt, response } = input;
 
-            if (chatId) {
-                return await ctx.db.chat.upsert({
+            // Use upsert if chatId is provided; otherwise, create a new chat.
+            const chat = chatId
+                ? await ctx.db.chat.upsert({
                     where: { id: chatId },
                     update: {
                         updatedAt: new Date(),
-                        title: title ?? undefined,
+
+
                     },
                     create: {
-                        id: chatId, // If you want to set the provided ID on creation
+                        id: chatId, // Use provided ID on creation
                         userId: ctx.user.userId,
                         title: title ?? "New Chat",
                     },
-                });
-            } else {
-                return await ctx.db.chat.create({
+                })
+                : await ctx.db.chat.create({
                     data: {
                         userId: ctx.user.userId,
                         title: title ?? "New Chat",
                     },
                 });
+
+            // Add the message (prompt/response) to the Message table.
+            const message = await ctx.db.message.create({
+                data: {
+                    chatId: chatId!,
+                    prompt,
+                    response,
+                },
+            });
+
+            // Return both the chat and the newly created message.
+            return { chat, message };
+        }),
+
+    getHistory: protectedProcedure.query(async ({ ctx }) => {
+
+        if (!ctx.user.userId) {
+            throw new Error("An Error occured");
+        }
+
+        const history = await ctx.db.chat.findMany({
+            where: {
+                userId: ctx.user.userId,
+            },
+            orderBy: {
+                createdAt: 'desc'
+            },
+            select: {
+                title: true,
+                id: true,
+                messages: {
+                    select: {
+                        prompt: true,
+                        response: true,
+                        id: true,
+
+                    }
+                }
             }
         })
+
+        return history;
+    })
 
 })

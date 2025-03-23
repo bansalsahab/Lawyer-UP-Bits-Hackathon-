@@ -1,42 +1,33 @@
 'use client'
 
-import { Sidebar, SidebarContent, SidebarGroup, SidebarGroupContent, SidebarGroupLabel, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem, SidebarTrigger, useSidebar } from '@/components/ui/sidebar'
+import {
+    Sidebar,
+    SidebarContent,
+    SidebarGroup,
+    SidebarGroupContent,
+    SidebarGroupLabel,
+    SidebarHeader,
+    SidebarMenu,
+    SidebarMenuButton,
+    SidebarMenuItem,
+    SidebarTrigger,
+    useSidebar
+} from '@/components/ui/sidebar'
 import { cn } from '@/lib/utils'
-import { SquarePen } from 'lucide-react'
+import { api } from '@/trpc/react'
+import { SquarePen, Loader2 } from 'lucide-react'
 import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
 import React from 'react'
 
-type ChatData = {
-    title: string,
-    chatId: string
-}[]
-
-const sampleTest: ChatData = [
-    {
-        title: 'temp chat 1',
-        chatId: '123',
-    },
-    {
-        title: 'temp chat 2',
-        chatId: '124',
-    },
-    {
-        title: 'temp chat 3',
-        chatId: '125',
-    },
-]
-
 const AppSidebar = () => {
+    const { data: History, isLoading } = api.chat.getHistory.useQuery();
     const { open } = useSidebar();
     const pathname = usePathname()
     const router = useRouter();
-    let uuid;
-
 
     const handleChatCreation = () => {
-        // console.log(crypto.randomUUID())
-        uuid = crypto.randomUUID();
+        const uuid = crypto.randomUUID();
         router.push(`/chat/${uuid}`)
     }
 
@@ -46,9 +37,7 @@ const AppSidebar = () => {
                 {open && (
                     <div className='flex items-center justify-between p-2'>
                         <SidebarTrigger size={'lg'} />
-                        <span className='hover:cursor-pointer'
-                            onClick={handleChatCreation}
-                        >
+                        <span className='hover:cursor-pointer' onClick={handleChatCreation}>
                             <SquarePen size={20} />
                         </span>
                     </div>
@@ -60,22 +49,28 @@ const AppSidebar = () => {
                         History
                     </SidebarGroupLabel>
                     <SidebarGroupContent>
-                        <SidebarMenu>
-                            {sampleTest.map((item, index) => (
-                                <SidebarMenuItem key={index}>
-                                    <SidebarMenuButton asChild>
-                                        <Link
-                                            className={cn({
-                                                '!bg-primary !text-white': pathname === `/chat/${item.chatId}`
-                                            }, 'list-none')}
-                                            href={`/chat/${item.chatId}`}
-                                        >
-                                            {item.title}
-                                        </Link>
-                                    </SidebarMenuButton>
-                                </SidebarMenuItem>
-                            ))}
-                        </SidebarMenu>
+                        {isLoading ? (
+                            <div className="flex items-center justify-center h-24">
+                                <Loader2 className="w-6 h-6 animate-spin text-muted-foreground" />
+                            </div>
+                        ) : (
+                            <SidebarMenu>
+                                {History?.map((item, index) => (
+                                    <SidebarMenuItem key={index}>
+                                        <SidebarMenuButton asChild>
+                                            <Link
+                                                className={cn({
+                                                    '!bg-primary !text-white': pathname === `/chat/${item.id}`
+                                                }, 'list-none')}
+                                                href={`/chat/${item.id}`}
+                                            >
+                                                {item.title}
+                                            </Link>
+                                        </SidebarMenuButton>
+                                    </SidebarMenuItem>
+                                ))}
+                            </SidebarMenu>
+                        )}
                     </SidebarGroupContent>
                 </SidebarGroup>
             </SidebarContent>
