@@ -4,7 +4,7 @@ import { Sidebar, SidebarContent, SidebarGroup, SidebarGroupContent, SidebarGrou
 import { cn } from '@/lib/utils'
 import { SquarePen } from 'lucide-react'
 import Link from 'next/link'
-import { usePathname } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
 import React from 'react'
 
 type ChatData = {
@@ -30,6 +30,15 @@ const sampleTest: ChatData = [
 const AppSidebar = () => {
     const { open } = useSidebar();
     const pathname = usePathname()
+    const router = useRouter();
+    let uuid;
+
+
+    const handleChatCreation = () => {
+        // console.log(crypto.randomUUID())
+        uuid = crypto.randomUUID();
+        router.push(`/chat/${uuid}`)
+    }
 
     return (
         <Sidebar className='min-h-screen'>
@@ -37,7 +46,9 @@ const AppSidebar = () => {
                 {open && (
                     <div className='flex items-center justify-between p-2'>
                         <SidebarTrigger size={'lg'} />
-                        <span className='hover:cursor-pointer'>
+                        <span className='hover:cursor-pointer'
+                            onClick={handleChatCreation}
+                        >
                             <SquarePen size={20} />
                         </span>
                     </div>

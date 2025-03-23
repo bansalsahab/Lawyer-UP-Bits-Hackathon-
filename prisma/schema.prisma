@@ -24,10 +24,8 @@ model Chat {
     userId    String
     createdAt DateTime  @default(now())
     updatedAt DateTime  @updatedAt
-    // Each chat session has many messages
     messages  Message[]
 
-    // You can add additional fields to describe the session, e.g., title, status, etc.
     title String?
 }
 
@@ -35,8 +33,7 @@ model Message {
     id        String   @id @default(uuid())
     chat      Chat     @relation(fields: [chatId], references: [id])
     chatId    String
-    // Indicates whether this message is from the user or the system (for example, legal document generator response)
-    isUser    Boolean
-    content   String // The actual text content of the message
+    prompt    String
+    response  String
     createdAt DateTime @default(now())
 }

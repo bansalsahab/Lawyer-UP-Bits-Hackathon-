@@ -2,6 +2,8 @@
 import { Button } from '@/components/ui/button'
 import { SidebarTrigger, useSidebar } from '@/components/ui/sidebar'
 import { Textarea } from '@/components/ui/textarea'
+import useRefetch from '@/hooks/use-refetch'
+import { api } from '@/trpc/react'
 import { UserButton } from '@clerk/nextjs'
 import { ArrowUp, ChevronDown, MessageCircleDashed, Plus, SquarePen } from 'lucide-react'
 import { useParams } from 'next/navigation'
@@ -11,13 +13,42 @@ type Props = {}
 
 const ChatPage = (props: Props) => {
 
+    const [prompt, setPrompt] = useState<string | null>('')
     const { open } = useSidebar();
 
-    const { chatid } = useParams()
+    const { chatid } = useParams<{ chatid: string }>()
     const [selectedOption, setSelectedOption] = useState<string | null>(null)
+    const { data: chatPresent } = api.chat.isChat.useQuery({ chatId: chatid })
+
+    const createGroup = api.chat.createChat.useMutation();
+    const refetch = useRefetch();
+
 
     const handleSelection = (option: string) => {
         setSelectedOption(prev => (prev === option ? null : option)) // Toggle selection
+    }
+
+    const handleChatCreation = () => {
+
+    }
+
+    const handleFormSubmit = async () => {
+        if (chatPresent) {
+            // update the chats
+        }
+        else {
+            // create new chat
+            await createGroup.mutateAsync({
+                chatId: chatid,
+            }, {
+                onSuccess: () => {
+                    refetch();
+                    setPrompt('')
+                }
+            })
+        }
+
+        // console.log(prompt);
     }
 
     return (
@@ -29,7 +60,9 @@ const ChatPage = (props: Props) => {
                         !open && (
                             <div className='flex items-center gap-x-1'>
                                 <SidebarTrigger />
-                                <span className='hover:cursor-pointer'>
+                                <span className='hover:cursor-pointer'
+                                    onClick={() => handleChatCreation()}
+                                >
                                     <SquarePen size={20} />
                                 </span>
                             </div>
@@ -57,7 +90,9 @@ const ChatPage = (props: Props) => {
                 <div className="text-center w-full rounded-2xl border p-2 border-black">
                     <Textarea
                         className="w-full rounded-2xl max-h-40 border-none focus:outline-none focus:ring-0 focus:border-transparent"
-                        placeholder='Asy anything'
+                        placeholder='Ask anything'
+                        value={prompt ?? ''}
+                        onChange={(e) => setPrompt(e.target.value)}
                     />
 
                     <div className='flex mt-2 items-center justify-between'>
@@ -93,7 +128,9 @@ const ChatPage = (props: Props) => {
                             </Button>
                         </div>
                         <div>
-                            <Button className='w-10 h-10 rounded-full'>
+                            <Button
+                                onClick={handleFormSubmit}
+                                className='w-10 h-10 rounded-full'>
                                 <ArrowUp />
                             </Button>
                         </div>
