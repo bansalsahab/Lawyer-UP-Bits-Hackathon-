@@ -81,6 +81,7 @@ The system runs on **GPU-accelerated environments** (e.g., Google Colab or other
 2. **LLM Processing**: The model processes the input using prompt templates designed for legal language.  
 3. **Contract Generation**: The system outputs a fully drafted contract, including standard clauses and user-specific details.  
 4. **User Review & Edit**: The generated contract can be reviewed, edited, or further customized before finalization.
+![1c76cf6e-a30c-4d74-8047-6dcfac0b5073](https://github.com/user-attachments/assets/141d3340-d020-415d-ad0d-3a9266503844)
 
 ---
 
