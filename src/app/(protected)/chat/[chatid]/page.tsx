@@ -73,7 +73,7 @@ const ChatPage = (props: Props) => {
                                 variant={selectedOption === "hello1" ? "secondary" : "outline"}
                                 onClick={() => handleSelection("hello1")}
                             >
-                                {chatid}
+                                Employ
                             </Button>
 
                             {/* Second hello button */}
@@ -82,7 +82,14 @@ const ChatPage = (props: Props) => {
                                 variant={selectedOption === "hello2" ? "secondary" : "outline"}
                                 onClick={() => handleSelection("hello2")}
                             >
-                                hello
+                                Lease
+                            </Button>
+                            <Button
+                                className={`rounded-full cursor-pointer ${selectedOption === 'hello2' ? 'text-white' : 'text-black'} `}
+                                variant={selectedOption === "hello2" ? "secondary" : "outline"}
+                                onClick={() => handleSelection("hello2")}
+                            >
+                                Licence
                             </Button>
                         </div>
                         <div>
