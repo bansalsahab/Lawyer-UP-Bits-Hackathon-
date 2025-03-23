@@ -85,3 +85,9 @@ The system runs on **GPU-accelerated environments** (e.g., Google Colab or other
 
 ---
 
+![dbf4dde1-830c-4dfc-8460-8c8539b05f67](https://github.com/user-attachments/assets/01f04b6a-21ae-44de-a2eb-6b69cbc025be)
+
+
+![6d804890-74ef-44c7-9f6a-aa0aa99c43e3](https://github.com/user-attachments/assets/5bb15474-ae6e-481d-b098-9ac6870625a2)
+![501a603e-7cb0-4703-acd8-15409b5f4ba2](https://github.com/user-attachments/assets/1893c51d-b79f-4898-9009-2b5b9c1cd5ad)
+![1fd3dfae-6525-4eca-a98d-b8683bcad178](https://github.com/user-attachments/assets/f0295620-81d2-45f0-940c-776892ad00c8)
