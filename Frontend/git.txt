@@ -1,2 +1,2 @@
 
-The frontend code in one the branch Frontend (haven't merged yet) 
+The frontend code is on the branch Frontend (haven't merged yet) 
