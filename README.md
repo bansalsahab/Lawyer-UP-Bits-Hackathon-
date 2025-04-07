@@ -83,7 +83,7 @@ The system runs on **GPU-accelerated environments** (e.g., Google Colab or other
 4. **User Review & Edit**: The generated contract can be reviewed, edited, or further customized before finalization.
 ![1c76cf6e-a30c-4d74-8047-6dcfac0b5073](https://github.com/user-attachments/assets/141d3340-d020-415d-ad0d-3a9266503844)
 
----
+----
 
 ![dbf4dde1-830c-4dfc-8460-8c8539b05f67](https://github.com/user-attachments/assets/01f04b6a-21ae-44de-a2eb-6b69cbc025be)
 
